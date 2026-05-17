@@ -1,0 +1,13 @@
+const express=require('express')
+const router=express.Router()
+const {createLectures,getLectureBySection,unpublishedLecture, updateLecture,deleteLecture, getLectureById,publishLecture}=require('../controllers/lectureController')
+const {upload}=require('../config/cloudinary')
+const {protect}=require('../middleware/authMiddleware')
+router.post('/create',protect,upload.single("resourceFile"),createLectures)
+router.get('/section/:sectionId',protect,getLectureBySection)
+router.get('/lecture/:lectureId',protect,getLectureById)
+router.patch('/publish/:id',protect,publishLecture)
+router.patch('/unpublish/:id',protect,unpublishedLecture)
+router.delete('/delete/:id',protect,deleteLecture)
+router.put('/update/:id',protect,updateLecture)
+module.exports=router

@@ -1,0 +1,13 @@
+const express =require('express')
+const router=express.Router()
+const {register,login,getProfile,updateProfile,changePassword,forgotPassword,resetPassword}=require('../controllers/userController')
+const {protect}=require('../middleware/authMiddleware')
+const {upload,ExtractImageByIds}=require('../config/cloudinary')
+router.post('/register',upload.single("avatar"),ExtractImageByIds, register)
+router.post('/login',login)
+router.get('/me',protect,getProfile)
+router.put('/update',protect,upload.single("avtarUrl"), ExtractImageByIds,updateProfile)
+router.post('/change-password',protect,changePassword)
+router.post('/forgot-password',forgotPassword)
+router.post('/reset-password',resetPassword)
+module.exports=router

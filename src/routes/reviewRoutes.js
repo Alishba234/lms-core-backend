@@ -1,0 +1,18 @@
+const express=require('express')
+const router=express.Router()
+const {createReview,getCourseReviews,getReviewById,deleteReview,getReportedReview, clearReportFlag, appoveReview,rejectReview, getAllReviews, markHelpful,reportReview, updateReview}=require('../controllers/reviewController')
+const {protect,admin}=require('../middleware/authMiddleware')
+router.post('/create',protect,createReview)
+router.get('/course/:courseId',getCourseReviews)
+router.get('/review/:id',getReviewById)
+router.put('/update/:id',protect,updateReview)
+router.delete('/delete/:id',protect,deleteReview)
+router.put('/mark/:id' ,protect,markHelpful)
+router.put('/report/:id', protect,reportReview)
+//admin functions
+router.get('/admin/all',protect,admin,getAllReviews)
+router.put('/admin/:id',protect,admin,appoveReview)
+router.put('/admin/:id',protect,admin,rejectReview)
+router.put('/admin/:id',protect,admin,clearReportFlag)
+router.get('/admin',protect,admin,getReportedReview)
+module.exports=router

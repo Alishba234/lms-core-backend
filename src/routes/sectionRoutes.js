@@ -1,0 +1,12 @@
+const express=require('express')
+const router=express.Router()
+const {createSection,getSectionById,publishSection,unplishedSection, updatSection,deleteSection,reorderSections}=require('../controllers/sectionController')
+const {protect}=require('../middleware/authMiddleware')
+router.post('/create', protect,createSection)
+router.get('/:id',getSectionById)
+router.patch('/:id/publish', protect,publishSection)
+router.patch('/:id/unpublish' ,protect,unplishedSection)
+router.delete('/:id/delete', protect,deleteSection)
+router.put('/:id/update', protect,updatSection)
+router.patch('/reorder', protect,reorderSections)
+module.exports=router
