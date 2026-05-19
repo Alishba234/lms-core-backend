@@ -10,6 +10,5 @@ router.get('/get',getAllAssigments)
 router.get('/get/:id',getAssigmentsById)
 router.delete('/:id',protect,deleteAssigment)
 router.patch('/:id/publish',protect,pulishAssigment)
-router.patch('/:id/unpublish',protect,unpulishAssigment)
-   
+router.patch('/:id/unpublish',protect,unpulishAssigment)   
 module.exports=router
