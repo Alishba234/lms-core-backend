@@ -39,21 +39,7 @@ const ExtractImageByIds = (req, res, next) => {
     }
     next();
 };
-// const ExtractImageByIds = (req, res, next) => {
-//   if (req.file) {
-//     req.imageData = {
-//       imageUrl: req.file.path,
-//       imageId: req.file.filename,
-//     };
-//   } else {
-//     req.imageData = {
-//       imageUrl: null,
-//       imageId: null,
-//     };
-//   }
 
-//   next();
-// };
 
 const deleteImage = async (publicId) => {
   try {
@@ -108,20 +94,7 @@ const uploadImage = async (filePath) => {
   }
 };
 
-// const deleteImage = async (publicId) => {
-//   try {
-//     const result = await cloudinary.uploader.destroy(publicId, {
-//       resource_type: "image",
-//     });
 
-//     console.log("Image delete result:", result);
-
-//     return result;
-//   } catch (error) {
-//     console.log("Error deleting image:", error);
-//     throw new Error("Image delete failed");
-//   }
-// };
 module.exports={
     upload,
     ExtractImageByIds,
