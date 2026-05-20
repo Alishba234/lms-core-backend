@@ -151,6 +151,23 @@ db.Payment.belongsTo(db.Course, {
   foreignKey: "courseId",
   as: "course"
 });
+db.User.hasMany(db.Submission, {
+  foreignKey: "userId",
+  as: "submissions"
+});
+db.Assignment.hasMany(db.Submission, {
+  foreignKey: "assignmentId",
+  as: "submissions"
+});
+db.Submission.belongsTo(db.User, {
+  foreignKey: "userId",
+  as: "user"
+});
+
+db.Submission.belongsTo(db.Assignment, {
+  foreignKey: "assignmentId",
+  as: "assignment"
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
