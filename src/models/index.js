@@ -168,6 +168,23 @@ db.Submission.belongsTo(db.Assignment, {
   foreignKey: "assignmentId",
   as: "assignment"
 });
+db.Course.hasMany(db.Assignment, {
+  foreignKey: "courseId",
+  as: "assignments"
+});
+db.Lecture.hasMany(db.Assignment, {
+  foreignKey: "lectureId",
+  as: "assignments"
+});
+db.Assignment.belongsTo(db.Course, {
+  foreignKey: "courseId",
+  as: "course"
+});
+
+db.Assignment.belongsTo(db.Lecture, {
+  foreignKey: "lectureId",
+  as: "lecture"
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
