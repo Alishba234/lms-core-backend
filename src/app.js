@@ -13,6 +13,7 @@ const reviewRoutes=require('./routes/reviewRoutes')
 const enrollmentRoutes=require('./routes/enrollmentRoutes')
 const paymentRoutes=require('./routes/paymentRoutes')
 const assigmentRoutes=require('./routes/assigmentRoutes')
+const submissionRoutes=require('./routes/submissionRoutes')
 const {stripeWebhookHandler}=require('./controllers/paymentController')
 
 const app=express()
@@ -38,6 +39,7 @@ app.use('/api/v1/review',reviewRoutes)
 app.use('/api/v1/enrollment',enrollmentRoutes)
 app.use('/api/v1/payment',paymentRoutes)
 app.use('/api/v1/assigment',assigmentRoutes)
+app.use('/api/v1/submission',submissionRoutes)
 // app.use('/api/auth',authRoutes)
 // // ✅ ADD THE REDIRECT HERE
 // app.get('/reset-password/:token', (req, res) => {

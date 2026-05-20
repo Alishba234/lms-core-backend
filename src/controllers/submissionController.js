@@ -18,7 +18,7 @@ const getPagination = (page = 1, limit = 10) => {
 
 
 const validateEnrollment = async (userId, courseId) => {
-  const enrollment = await Enrollment.findOne({
+  const enrollment = await db.Enrollment.findOne({
     where: {
       userId,
       courseId,
@@ -35,7 +35,7 @@ const validateEnrollment = async (userId, courseId) => {
 
 
 const validateAssignmentOwnership = async (assignmentId, user) => {
-  const assignment = await Assignment.findByPk(assignmentId, {
+  const assignment = await db.Assignment.findByPk(assignmentId, {
     include: [{ 
       model: Course, 
       as: "course",
@@ -56,7 +56,7 @@ const validateAssignmentOwnership = async (assignmentId, user) => {
 
 
 const calculateAttemptNumber = async (userId, assignmentId) => {
-  const maxAttempt = await Submission.max("attemptNumber", {
+  const maxAttempt = await db.Submission.max("attemptNumber", {
     where: { userId, assignmentId }
   });
   
@@ -76,7 +76,7 @@ const checkLateSubmission = (dueDate) => {
 
 
 const validateAllowedAttempts = async (userId, assignment) => {
-  const completedSubmissions = await Submission.count({
+  const completedSubmissions = await db.Submission.count({
     where: {
       userId,
       assignmentId: assignment.id,
@@ -122,7 +122,7 @@ const createSubmission=asyncHandler(async (req,res) => {
     }
 
     // Find assignment with course
-    const assignment = await Assignment.findByPk(assignmentId, {
+    const assignment = await db.Assignment.findByPk(assignmentId, {
       include: [{ model: Course, as: "course" }]
     });
 
@@ -175,7 +175,7 @@ const createSubmission=asyncHandler(async (req,res) => {
     }
 
     // Create submission
-    const submission = await Submission.create({
+    const submission = await db.Submission.create({
       content: content || null,
       attachmentUrl,
       status,
@@ -187,7 +187,7 @@ const createSubmission=asyncHandler(async (req,res) => {
     });
 
     // Fetch created submission with relations
-    const createdSubmission = await Submission.findByPk(submission.id, {
+    const createdSubmission = await  db.Submission.findByPk(submission.id, {
       include: [
         { model: User, as: "user", attributes: ["id", "name", "email"] },
         { model: Assignment, as: "assignment", attributes: ["id", "title", "dueDate", "maxScore"] }
