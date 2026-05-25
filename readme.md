@@ -96,6 +96,8 @@ The project follows the **MVC (Model-View-Controller)** pattern with a clean sep
 | `POST` | `/api/auth/reset-password/:token` | Reset user password | `Public` |
 | `GET` | `/api/auth/me` | Get current logged in user | `Private` |
 
+![alt text](image.png)
+
 ---
 
 ### 👥 User APIs
