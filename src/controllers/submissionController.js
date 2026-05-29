@@ -207,6 +207,61 @@ const createSubmission=asyncHandler(async (req,res) => {
     }
     
 })
+
+const getSubmissionById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const isAdmin = req.user.role === "admin";
+
+    const submission = await Submission.findByPk(id, {
+      include: [
+        { model: User, as: "user", attributes: ["id", "name", "email", "profilePicture"] },
+        { 
+          model: Assignment, 
+          as: "assignment",
+          include: [
+            { model: Course, as: "course", attributes: ["id", "title", "instructorId"] }
+          ]
+        }
+      ]
+    });
+
+    if (!submission) {
+      return res.status(404).json({
+        success: false,
+        message: "Submission not found"
+      });
+    }
+
+    // Check authorization
+    const isOwner = submission.userId === userId;
+    const isInstructor = submission.assignment.course.instructorId === userId;
+    
+    if (!isOwner && !isInstructor && !isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to view this submission"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Submission retrieved successfully",
+      data: submission
+    });
+  } catch (error) {
+    console.error("Get submission by ID error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined
+    });
+  }
+};
+
+
 module.exports={
-    createSubmission
+    createSubmission,
+    getSubmissionById
 }
