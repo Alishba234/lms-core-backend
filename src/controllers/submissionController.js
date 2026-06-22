@@ -214,7 +214,7 @@ const getSubmissionById = async (req, res) => {
     const userId = req.user.id;
     const isAdmin = req.user.role === "admin";
 
-    const submission = await Submission.findByPk(id, {
+    const submission = await  db.Submission.findByPk(id, {
       include: [
         { model: User, as: "user", attributes: ["id", "name", "email", "profilePicture"] },
         { 
@@ -251,17 +251,66 @@ const getSubmissionById = async (req, res) => {
       data: submission
     });
   } catch (error) {
-    console.error("Get submission by ID error:", error);
-    return res.status(500).json({
+       return res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined
+      message: error.message
+    }); 
+  }
+};
+const deleteSubmission = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const isAdmin = req.user.role === "admin";
+
+    const submission = await db.Submission.findByPk(id);
+
+    if (!submission) {
+      return res.status(404).json({
+        success: false,
+        message: "Submission not found"
+      });
+    }
+
+    // Check authorization
+    const isOwner = submission.userId === userId;
+    
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this submission"
+      });
+    }
+
+    // Students can only delete drafts
+    if (!isAdmin && submission.status !== "draft") {
+      return res.status(400).json({
+        success: false,
+        message: "You can only delete draft submissions"
+      });
+    }
+
+    // Delete attachment from Cloudinary
+    if (submission.attachmentUrl) {
+      await deleteOldAttachment(submission.attachmentUrl);
+    }
+
+    await submission.destroy();
+
+    return res.status(200).json({
+      success: true,
+      message: "Submission deleted successfully"
     });
+  } catch (error) {
+          return res.status(500).json({
+      success: false,
+      message: error.message
+    });      
   }
 };
 
-
 module.exports={
     createSubmission,
-    getSubmissionById
+    getSubmissionById,
+    deleteSubmission
 }
